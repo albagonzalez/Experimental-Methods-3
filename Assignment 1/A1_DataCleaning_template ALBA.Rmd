@@ -160,7 +160,7 @@ Most variables should make sense, here the less intuitive ones.
 Feel free to rename the variables into something you can remember (i.e. nonVerbalIQ, verbalIQ)
 
 ```{r}
-
+#Select the columns that we want to use from each dataframe
 demo_train2 <- select(demo_train, "VISIT", "SUBJ", "Diagnosis", "Ethnicity", "Gender", "Age", "ADOS", "MullenRaw", "ExpressiveLangRaw", "Socialization")
 LU_train2 <- select(LU_train, "VISIT", "SUBJ", "MOT_MLU", "CHI_MLU")
 token_train2 <- select(token_train, "VISIT", "SUBJ", "types_MOT", "types_CHI", "tokens_MOT", "tokens_CHI")
@@ -173,7 +173,10 @@ Some things to pay attention to:
 * make sure to understand whether (and if so why) there are NAs in the dataset (e.g. some measures were not taken at all visits, some recordings were lost or permission to use was withdrawn)
 
 ```{r}
+#Merging 2 of the dataframes, then the third last to the merged df
+df <- merge(demo_train2, LU_train2, by=c("SUBJ","VISIT"))
 
+# NOT WORKING df1 <- merge(df, token_train2, by= c("SUBJ", "VISIT"))
 
 ```
 
