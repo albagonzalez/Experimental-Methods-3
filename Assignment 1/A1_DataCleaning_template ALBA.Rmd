@@ -161,8 +161,9 @@ Feel free to rename the variables into something you can remember (i.e. nonVerba
 
 ```{r}
 
-
-
+demo_train2 <- select(demo_train, "VISIT", "SUBJ", "Diagnosis", "Ethnicity", "Gender", "Age", "ADOS", "MullenRaw", "ExpressiveLangRaw", "Socialization")
+LU_train2 <- select(LU_train, "VISIT", "SUBJ", "MOT_MLU", "CHI_MLU")
+token_train2 <- select(token_train, "VISIT", "SUBJ", "types_MOT", "types_CHI", "tokens_MOT", "tokens_CHI")
 ```
 
 2e. Finally we are ready to merge all the data sets into just one. 
