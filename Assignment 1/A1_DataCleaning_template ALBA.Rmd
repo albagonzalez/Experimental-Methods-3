@@ -122,8 +122,9 @@ Tip: You can either have one line of code for each child name that is to be chan
 
 
 ```{r}
-
-
+demo_train$SUBJ <- stringr::str_replace_all(demo_train$SUBJ, "[[:punct:]]", "")
+LU_train$SUBJ <- stringr::str_replace_all(LU_train$SUBJ, "[[:punct:]]", "")
+token_train$SUBJ <- stringr::str_replace_all(token_train$SUBJ, "[[:punct:]]", "")
 ```
 
 2d. Now that the nitty gritty details of the different data sets are fixed, we want to make a subset of each data set only containig the variables that we wish to use in the final data set.
