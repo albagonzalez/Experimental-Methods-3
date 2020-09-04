@@ -4,7 +4,6 @@ author: "[FILL IN YOUR NAME]"
 date: "[FILL IN THE DATE]"
 output: html_document
 ---
-kjahiusgdvbkiocugia
 
 
 # Assignment 1, Language development in Autism Spectrum Disorder (ASD) - Brushing up your code skills
@@ -160,7 +159,7 @@ Most variables should make sense, here the less intuitive ones.
 Feel free to rename the variables into something you can remember (i.e. nonVerbalIQ, verbalIQ)
 
 ```{r}
-
+#Select the columns that we want to use from each dataframe
 demo_train2 <- select(demo_train, "VISIT", "SUBJ", "Diagnosis", "Ethnicity", "Gender", "Age", "ADOS", "MullenRaw", "ExpressiveLangRaw", "Socialization")
 LU_train2 <- select(LU_train, "VISIT", "SUBJ", "MOT_MLU", "CHI_MLU")
 token_train2 <- select(token_train, "VISIT", "SUBJ", "types_MOT", "types_CHI", "tokens_MOT", "tokens_CHI")
@@ -173,15 +172,15 @@ Some things to pay attention to:
 * make sure to understand whether (and if so why) there are NAs in the dataset (e.g. some measures were not taken at all visits, some recordings were lost or permission to use was withdrawn)
 
 ```{r}
+#Merging 2 of the dataframes, then the third last to the merged df
+df <- merge(demo_train2, LU_train2, by=c("SUBJ","VISIT"))
 
-
+df2 <- merge(df, token_train, by=c("SUBJ","VISIT"))
 ```
 
 
 2f. Only using clinical measures from Visit 1
-In order for our models to be useful, we want to miimize the need to actually test children as they develop. In other words, we would like to be able to understand and predict the children's linguistic development after only having tested them once. Therefore we need to make sure that our ADOS, MullenRaw, ExpressiveLangRaw and Socialization variables are reporting (for all visits) only the scores from visit 1.
-
-A possible way to do so:
+In order for our models to be useful, we want to minimize the need to actually test children as they develop. In other words, we would like to be able to understand and predict the children's linguistic development after only having tested them once. Therefore we need to make sure that our ADOS, MullenRaw, ExpressiveLangRaw and Socialization variables are reporting (for all visits) only the scores from visit1
 * create a new dataset with only visit 1, child id and the 4 relevant clinical variables to be merged with the old dataset
 * rename the clinical variables (e.g. ADOS to ADOS1) and remove the visit (so that the new clinical variables are reported for all 6 visits)
 * merge the new dataset with the old
@@ -189,6 +188,19 @@ A possible way to do so:
 
 
 ```{r}
+#Creating a subset for only the variables ADOS, MullenRaw, ExpressiveLangRaw and Socialization for visit 1.
+subset1 <- select(df2, SUBJ, VISIT, ADOS, MullenRaw, ExpressiveLangRaw, Socialization)
+#Filtering out the visits that are not the 1st one
+subset1 <-filter(subset1, VISIT == "1")
+#Renaming the clinical variables
+subset1 <- dplyr::rename(subset1, c("ADOS1" = "ADOS"))
+subset1 <- dplyr::rename(subset1, c("VISIT1" = "VISIT"))
+subset1 <- dplyr::rename(subset1, c("ExpressiveLangRaw1" = "ExpressiveLangRaw"))
+subset1 <- dplyr::rename(subset1, c("MullenRaw1"="MullenRaw"))
+subset1 <- dplyr::rename(subset1, c("Socialization1" = "Socialization"))
+
+
+
 
 ```
 
