@@ -221,10 +221,7 @@ df2$SUBJ <- as.numeric(df2$SUBJ)
 df2$SUBJ <- as.character(df2$SUBJ)
 
 #Renaming the levels of the factor gender and diagnosis
-#df2$Gender <- chartr("12", "MF", df2$Gender)
-#df2$Diagnosis <- chartr("A", "ASD", df2$Diagnosis)
-
-#didnt work, now i have to change the ones that are A to ASD and T to TD
+df2$Diagnosis <- factor(c("ASD", "TD"))
 
 ```
 
