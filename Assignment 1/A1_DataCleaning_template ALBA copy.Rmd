@@ -96,6 +96,7 @@ Tip: look through the chapter on data transformation in R for data science (http
 summary(demo_train)
 summary(LU_train)
 summary(token_train)
+
 #Renaming the columns for the different dataframes to match
 demo_train <- dplyr::rename(demo_train, c("VISIT" = "Visit"))
 demo_train <- dplyr::rename(demo_train, c("SUBJ" = "Child.ID"))
@@ -121,6 +122,7 @@ Tip: You can either have one line of code for each child name that is to be chan
 
 
 ```{r}
+#Removing punctuation from thw column Subject
 demo_train$SUBJ <- stringr::str_replace_all(demo_train$SUBJ, "[[:punct:]]", "")
 LU_train$SUBJ <- stringr::str_replace_all(LU_train$SUBJ, "[[:punct:]]", "")
 token_train$SUBJ <- stringr::str_replace_all(token_train$SUBJ, "[[:punct:]]", "")
@@ -188,6 +190,7 @@ In order for our models to be useful, we want to minimize the need to actually t
 
 
 ```{r}
+            ### MY VERSION ###
 #Creating a subset for only the variables ADOS, MullenRaw, ExpressiveLangRaw and Socialization for visit 1.
 subset1 <- select(df2, SUBJ, VISIT, ADOS, MullenRaw, ExpressiveLangRaw, Socialization)
 #Filtering out the visits that are not the 1st one
@@ -206,6 +209,26 @@ df2 <- merge(df2, subset1, by = "SUBJ")
 
 ```
 
+```{r}
+
+#First we make copies of the clinical columns:
+df2$ADOS1 <- df2$ADOS
+df2$MullenRaw1 <- df2$MullenRaw
+df2$ExpressiveLangRaw1 <- df2$ExpressiveLangRaw
+df2$Socialization1 <- df2$Socialization
+
+#Putting NAs where the visits 2-6
+df2$ADOS1 <- ifelse(df2$VISIT %in% c("2", "3", "4", "5", "6"), NA, df2$ADOS1)
+df2$MullenRaw1 <- ifelse(df2$VISIT %in% c("2", "3", "4", "5", "6"), NA, df2$MullenRaw1)
+df2$ExpressiveLangRaw1 <- ifelse(df2$VISIT %in% c("2", "3", "4", "5", "6"), NA, df2$ExpressiveLangRaw1)
+df2$Socialization1 <- ifelse(df2$VISIT %in% c("2", "3", "4", "5", "6"), NA, df2$Socialization1)
+
+# Just making a little new data frame to get an overview of what we did.
+new <- select(df2, SUBJ, VISIT, ADOS1, MullenRaw1, ExpressiveLangRaw1, Socialization1)
+
+```
+
+
 2g. Final touches
 
 Now we want to
@@ -221,7 +244,16 @@ df2$SUBJ <- as.numeric(df2$SUBJ)
 df2$SUBJ <- as.character(df2$SUBJ)
 
 #Renaming the levels of the factor gender and diagnosis
-df2$Diagnosis <- factor(c("ASD", "TD"))
+# Renaming 1 and 2 in the gender column to M and F:
+df2$Gender <- gsub("1", "M", df2$Gender)
+df2$Gender <- gsub("2", "F", df2$Gender)
+
+#Renaming the levels of the factor Diagnosis from A and B to ASD and TD:
+df2$Diagnosis <- gsub("A", "ASD", df2$Diagnosis)
+df2$Diagnosis <- gsub("B", "TD", df2$Diagnosis)
+
+#Writing a csv file 
+write.csv()
 
 ```
 
